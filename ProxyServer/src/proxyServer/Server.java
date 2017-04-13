@@ -9,10 +9,15 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import org.opencv.core.Core;
 
 public class Server {
 
 	public static final int portNumber = 5555;
+	
+	static {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+	}
 	 
 	public static void main(String[] args){
 		Server proxyServer = new Server();
