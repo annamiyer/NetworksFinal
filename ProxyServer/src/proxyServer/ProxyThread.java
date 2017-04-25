@@ -36,7 +36,7 @@ public class ProxyThread extends Thread {
 	private String fileName;
 
 	private URL url;
-	private URLConnection conn;
+	private URLConnection connect;
 
 	private HashMap<String, String> headerFields;
 
@@ -119,7 +119,28 @@ public class ProxyThread extends Thread {
 	
 	//send the request to server and receive the page back
 	private void sendRequestAndGetServerContent() throws IOException {
-		
+		url = new URL(urlToCall);
+		connect = url.openConnection();
+
+		// add select header fields that we received to the clients to
+		// the http connection
+		for (String f : headerFields.keySet()) {
+			if (f.equals("Host") || f.equals("Referer")
+					|| f.equals("User-Agent") || f.equals("Accept")
+					|| f.equals("Cookie")) {
+				connect.addRequestProperty(f, headerFields.get(f));
+			}
+		}
+
+		// disable gzipping content
+		// connect.setRequestProperty("Accept-Encoding", "deflate");
+
+		connect.setDoInput(true);
+		// not doing HTTP posts
+		connect.setDoOutput(false);
+
+		// Get the response
+		is = connect.getInputStream();
 	}
 
 	//send back the modified webpage
