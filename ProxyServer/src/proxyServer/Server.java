@@ -15,9 +15,9 @@ public class Server {
 
 	public static final int portNumber = 5555;
 	
-	static {
+	/**static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-	}
+	}**/
 	 
 	public static void main(String[] args){
 		Server proxyServer = new Server();
@@ -34,20 +34,19 @@ public class Server {
 			Socket clientSocket = serverSocket.accept();
 			System.out.println("Connection to proxyServer is "
 					+clientSocket.isConnected());
+			
+			//create new proxy thread and pass server socket over as a constructor parameter
 			 
+			
+			//this will all move into the proxy thread
 			InputStreamReader inputStreamReader = new InputStreamReader(clientSocket.getInputStream());
 			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-			String command = bufferedReader.readLine();
-			bufferedReader.close();
 			
-			if(command.equals("Cancel")){
-				System.out.println("Shutting down the server ...");
-				break;
-			}
+			
 			
 			// iterate over all the lines following the GET/POST request
 			String meta = null;
-			while((meta = bufferedReader.readLine()).length() > 0){
+			while((meta = bufferedReader.readLine()) != null){
 				System.out.println(meta);
 			}
 
